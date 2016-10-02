@@ -11,13 +11,14 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		//OBS: Time.deltaTime considers rendering time
 		float touchPosition = Input.mousePosition.x;
 		if (touchPosition < Screen.width / 2) {
 			//move left
-			transform.position += new Vector3 (-speed, 0, 0);
+			transform.position += new Vector3 (-speed * Time.deltaTime, 0, 0);
 		} else {
 			//move right
-			transform.position += new Vector3 (+speed, 0, 0);
+			transform.position += new Vector3 (+speed * Time.deltaTime, 0, 0);
 		}
 	}
 }
