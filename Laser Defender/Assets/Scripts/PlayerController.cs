@@ -3,22 +3,34 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour {
 	public float speed = 2.0f;
+	private float xmin;
+	private float xmax;
 
-	// Use this for initialization
-	void Start () {
-	
+	void Start(){
+		float zDistance = transform.position.z - Camera.main.transform.position.z;
+		Vector3 leftMost = Camera.main.ViewportToWorldPoint (new Vector3 (0, 0, zDistance));
+		Vector3 rightMost = Camera.main.ViewportToWorldPoint (new Vector3 (1, 0, zDistance));
+
+		xmin = leftMost.x + this.GetComponent<SpriteRenderer>().bounds.size.x / 2f;
+		xmax = rightMost.x - this.GetComponent<SpriteRenderer>().bounds.size.x / 2f;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		//OBS: Time.deltaTime considers rendering time
 		float touchPosition = Input.mousePosition.x;
 		if (touchPosition < Screen.width / 2) {
 			//move left
-			transform.position += new Vector3 (-speed * Time.deltaTime, 0, 0);
+			//transform.position += new Vector3 (-speed * Time.deltaTime, 0, 0);
+			transform.position += Vector3.left * Time.deltaTime * speed;
 		} else {
 			//move right
-			transform.position += new Vector3 (+speed * Time.deltaTime, 0, 0);
+			//transform.position += new Vector3 (+speed * Time.deltaTime, 0, 0);
+			transform.position += Vector3.right * Time.deltaTime * speed;
 		}
+
+		//fixing player's position inside screen by clamping its x position to the start and end
+		float xClamp = Mathf.Clamp (transform.position.x, xmin, xmax);
+		transform.position = new Vector3 (xClamp, transform.position.y, transform.position.z);
 	}
 }
