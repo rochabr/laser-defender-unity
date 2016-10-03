@@ -38,8 +38,8 @@ public class EnemySpawner : MonoBehaviour {
 			transform.position += Vector3.left * speed * Time.deltaTime;
 		}
 
-		float rightEdgeOfFormation = transform.position.x + (0.5f * width);
-		float leftEdgeOfFormation = transform.position.x - (0.5f * width);
+		float rightEdgeOfFormation = transform.position.x + (width / 2.0f);
+		float leftEdgeOfFormation = transform.position.x - (width / 2.0f);
 
 		if (leftEdgeOfFormation < xmin || rightEdgeOfFormation > xmax) {
 			isMovingRight = !isMovingRight;
