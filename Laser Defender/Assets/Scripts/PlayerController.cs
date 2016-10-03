@@ -3,6 +3,8 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour {
 	public float speed = 2.0f;
+	public GameObject projectile;
+
 	private float xmin;
 	private float xmax;
 
