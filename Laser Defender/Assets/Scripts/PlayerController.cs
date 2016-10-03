@@ -8,11 +8,11 @@ public class PlayerController : MonoBehaviour {
 
 	void Start(){
 		float zDistance = transform.position.z - Camera.main.transform.position.z;
-		Vector3 leftMost = Camera.main.ViewportToWorldPoint (new Vector3 (0, 0, zDistance));
-		Vector3 rightMost = Camera.main.ViewportToWorldPoint (new Vector3 (1, 0, zDistance));
+		Vector3 leftEdge = Camera.main.ViewportToWorldPoint (new Vector3 (0, 0, zDistance));
+		Vector3 rightEdge = Camera.main.ViewportToWorldPoint (new Vector3 (1, 0, zDistance));
 
-		xmin = leftMost.x + this.GetComponent<SpriteRenderer>().bounds.size.x / 2f;
-		xmax = rightMost.x - this.GetComponent<SpriteRenderer>().bounds.size.x / 2f;
+		xmin = leftEdge.x + this.GetComponent<SpriteRenderer>().bounds.size.x / 2f;
+		xmax = rightEdge.x - this.GetComponent<SpriteRenderer>().bounds.size.x / 2f;
 	}
 
 	// Update is called once per frame
