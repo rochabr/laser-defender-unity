@@ -4,6 +4,7 @@ using System.Collections;
 public class PlayerController : MonoBehaviour {
 	public float speed = 2.0f;
 	public GameObject projectile;
+	public float projectileSpeed;
 
 	private float xmin;
 	private float xmax;
@@ -19,6 +20,12 @@ public class PlayerController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		//instantiate projectile
+		if (Input.GetMouseButtonDown (0)) {
+			GameObject beam = Instantiate (projectile, transform.position, Quaternion.identity) as GameObject;
+			beam.GetComponent<Rigidbody2D> ().velocity = new Vector3 (0, projectileSpeed, 0);
+		}
+
 		//OBS: Time.deltaTime considers rendering time
 		float touchPosition = Input.mousePosition.x;
 		if (touchPosition < Screen.width / 2) {
