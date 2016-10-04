@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerController : MonoBehaviour {
 	public float speed = 2.0f;
 	public GameObject projectile;
-	public float projectileSpeed;
+	public float projectileSpeed, firingRate;
 
 	private float xmin;
 	private float xmax;
@@ -22,8 +22,11 @@ public class PlayerController : MonoBehaviour {
 	void Update () {
 		//instantiate projectile
 		if (Input.GetMouseButtonDown (0)) {
-			GameObject beam = Instantiate (projectile, transform.position, Quaternion.identity) as GameObject;
-			beam.GetComponent<Rigidbody2D> ().velocity = new Vector3 (0, projectileSpeed, 0);
+			InvokeRepeating ("FireProjectile", 0.0000001f, firingRate);
+		}
+
+		if (Input.GetMouseButtonUp (0)) {
+			CancelInvoke ("FireProjectile");
 		}
 
 		//OBS: Time.deltaTime considers rendering time
@@ -41,5 +44,11 @@ public class PlayerController : MonoBehaviour {
 		//fixing player's position inside screen by clamping its x position to the start and end
 		float xClamp = Mathf.Clamp (transform.position.x, xmin, xmax);
 		transform.position = new Vector3 (xClamp, transform.position.y, transform.position.z);
+	}
+
+	void FireProjectile ()
+	{
+		GameObject beam = Instantiate (projectile, transform.position, Quaternion.identity) as GameObject;
+		beam.GetComponent<Rigidbody2D> ().velocity = new Vector3 (0, projectileSpeed, 0);
 	}
 }
