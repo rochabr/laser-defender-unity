@@ -22,11 +22,7 @@ public class EnemySpawner : MonoBehaviour {
 		xmin = leftEdge.x;// + this.GetComponent<SpriteRenderer>().bounds.size.x / 2f;
 		xmax = rightEdge.x;// - this.GetComponent<SpriteRenderer>().bounds.size.x / 2f;
 
-		foreach (Transform child in transform){
-			GameObject enemy = Instantiate (enemyPrefab, child.transform.position, Quaternion.identity) as GameObject;
-			//changing the current enemy's transform to the enemy formation transform
-			enemy.transform.parent = child;
-		}
+		this.BuildFormation ();
 	}
 	
 	// Update is called once per frame
@@ -46,9 +42,30 @@ public class EnemySpawner : MonoBehaviour {
 		} else if (rightEdgeOfFormation > xmax) {
 			isMovingRight = false;
 		}
+
+		if (FormationIsEmpty ()) {
+			this.BuildFormation ();
+		}
 	}
+
+	bool FormationIsEmpty(){
+		foreach (Transform child in transform) {
+			if (child.childCount > 0) {
+				return false;
+			}
+		}
+		return true;
+	}				
 
 	void OnDrawGizmos(){
 		Gizmos.DrawWireCube(transform.position, new Vector3(width, height));
+	}
+
+	void BuildFormation(){
+		foreach (Transform child in transform){
+			GameObject enemy = Instantiate (enemyPrefab, child.transform.position, Quaternion.identity) as GameObject;
+			//changing the current enemy's transform to the enemy formation transform
+			enemy.transform.parent = child;
+		}
 	}
 }
