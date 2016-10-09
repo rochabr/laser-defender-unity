@@ -5,6 +5,6 @@ public class Position : MonoBehaviour {
 	
 	// Update is called once per frame
 	void OnDrawGizmos () {
-		Gizmos.DrawWireSphere (transform.position, 1);
+		Gizmos.DrawWireSphere (transform.position, 0.5f);
 	}
 }
