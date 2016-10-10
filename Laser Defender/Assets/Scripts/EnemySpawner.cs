@@ -5,6 +5,7 @@ public class EnemySpawner : MonoBehaviour {
 
 	public GameObject enemyPrefab;
 	public float speed = 5f;
+	public float spawnDelay = 0.5f;
 
 	public float width = 10f;
 	public float height = 5f;
@@ -12,6 +13,10 @@ public class EnemySpawner : MonoBehaviour {
 	private bool isMovingRight = false;
 	private float xmin;
 	private float xmax;
+
+	void OnDrawGizmos(){
+		Gizmos.DrawWireCube(transform.position, new Vector3(width, height));
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -22,7 +27,7 @@ public class EnemySpawner : MonoBehaviour {
 		xmin = leftEdge.x;// + this.GetComponent<SpriteRenderer>().bounds.size.x / 2f;
 		xmax = rightEdge.x;// - this.GetComponent<SpriteRenderer>().bounds.size.x / 2f;
 
-		this.BuildFormation ();
+		this.SpawnEnemyUntilFull ();
 	}
 	
 	// Update is called once per frame
@@ -44,7 +49,7 @@ public class EnemySpawner : MonoBehaviour {
 		}
 
 		if (FormationIsEmpty ()) {
-			this.BuildFormation ();
+			this.SpawnEnemyUntilFull ();
 		}
 	}
 
@@ -55,17 +60,35 @@ public class EnemySpawner : MonoBehaviour {
 			}
 		}
 		return true;
-	}				
+	}	
 
-	void OnDrawGizmos(){
-		Gizmos.DrawWireCube(transform.position, new Vector3(width, height));
-	}
+	Transform NextFreePosition(){
+		foreach (Transform childPosition in transform) {
+			if (childPosition.childCount == 0) {
+				return childPosition;
+			}
+		}
+		return null;
+	}	
 
-	void BuildFormation(){
+	void SpawnAllEnemies(){
 		foreach (Transform child in transform){
 			GameObject enemy = Instantiate (enemyPrefab, child.transform.position, Quaternion.identity) as GameObject;
 			//changing the current enemy's transform to the enemy formation transform
 			enemy.transform.parent = child;
+		}
+	}
+
+	void SpawnEnemyUntilFull(){
+		Transform position = this.NextFreePosition ();
+		if (position != null) {
+			GameObject enemy = Instantiate (enemyPrefab, position.position, Quaternion.identity) as GameObject;
+			//changing the current enemy's transform to the enemy formation transform
+			enemy.transform.parent = position;
+		}
+
+		if (NextFreePosition ()) {
+			Invoke ("SpawnEnemyUntilFull", spawnDelay);
 		}
 	}
 }
